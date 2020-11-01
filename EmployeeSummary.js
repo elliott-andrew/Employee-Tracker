@@ -60,9 +60,9 @@ function initialPrompt() {
                 message: 'What would you like to do?',
                 type: 'rawlist',
                 choices: [
-                    "Add new department, role or employee.",
-                    "View all current departments, roles or employees.",
-                    "Update existing employee roles.",
+                    "Add new department, role or employee",
+                    "View all current departments, roles or employees",
+                    "Update existing employee roles",
                     "Exit"
                 ]
             }
@@ -70,7 +70,7 @@ function initialPrompt() {
         // Route the user depending on answer
         .then(function (answer) {
             switch (answer.action) {
-                case "Add new department, role or employee.":
+                case "Add new department, role or employee":
                     addNew();
                     break;
 
@@ -78,7 +78,7 @@ function initialPrompt() {
                     viewAll();
                     break;
 
-                case "Updates existing employee role.":
+                case "Updates existing employee role":
                     updateRole();
                     break;
 
@@ -109,23 +109,23 @@ function addNew() {
             message: "Would you like to add a new department, role or employee?",
             type: "rawlist",
             choices: [
-                "Add new department.",
-                "Add new role.",
-                "Add new employee."
+                "Add new department",
+                "Add new role",
+                "Add new employee"
             ]
         })
         // Route the user depending on answer
         .then(function (answer) {
             switch (answer.SelectAddNewOp) {
-                case "Add new department.":
+                case "Add new department":
                     addNewDepartment();
                     break;
 
-                case "Add new role.":
+                case "Add new role":
                     addNewRole();
                     break;
 
-                case "Add new employee.":
+                case "Add new employee":
                     addNewEmployee();
                     break;
             }
@@ -144,19 +144,22 @@ function addNewDepartment() {
             },
             {
                 name: "continue",
-                message: "Is there anyting else you would like to do?",
+                message: "Is there anything else you would like to do?",
                 type: "rawlist",
-                choices: ["Yes", "No"]
+                choices: ["Add another department", "Return to main menu", "Exit"]
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
             let addedDepartment = new Department(answer.newDepartment);
             allDepartments.push(addedDepartment);
             switch (answer.continue) {
-                case "Yes":
+                case "Add another department":
+                    addNewDepartment();
+                    break;
+                case "Return to main menu":
                     initialPrompt();
                     break;
-                case "No":
+                case "Exit":
                     endApp();
                     break;
             }
@@ -176,17 +179,23 @@ function addNewRole() {
                 name: "continue",
                 message: "Is there anyting else you would like to do?",
                 type: "rawlist",
-                choices: ["Yes", "No"]
+                choices: ["Add another role", "Update current employee's role", "Return to main menu", "Exit"]
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
             let addedRole = new Role(answer.newRole);
             allEmRoles.push(addedRole);
             switch (answer.continue) {
-                case "Yes":
+                case "Add another role.":
+                    addNewRole();
+                    break;
+                case "Update current employee's role":
+                    updateRole();
+                    break;
+                case "Return to main menu":
                     initialPrompt();
                     break;
-                case "No":
+                case "Exit":
                     endApp();
                     break;
             }
@@ -214,29 +223,56 @@ function addNewEmployee() {
                 name: "continue",
                 message: "Is there anyting else you would like to do?",
                 type: "rawlist",
-                choices: ["Yes", "No"]
+                choices: ["Add another employee", "Return to main menu", "Exit"]
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
             let addedEmployee = new Employee(answer.newEmployeeFN, answer.newEmployeeLN);
             allEmployees.push(addedEmployee);
             switch (answer.continue) {
-                case "Yes":
+                case "Add another employee":
+                    addNewEmployee();
+                    break;
+                case "Return to main menu":
                     initialPrompt();
                     break;
-                case "No":
+                case "Exit":
                     endApp();
                     break;
             }
         })
 }
 
-// function viewAll() {
-//     // Display all departments
-//     // Display all roles
-//     // Display all employees
-//     // prompt if the user would like to do more
-// }
+function viewAll() {
+    inquirer
+        .prompt([
+            // Display all departments
+            {
+                name: "viewData",
+                message: "What would you like to view?",
+                type: "rawlist",
+                choices: ["Current departments", "Current employee roles", "Current employees", "All current company information", "Exit"]
+            },
+        ]).then(function (answer) {
+            switch (answer.viewData) {
+                case "Current departments":
+                    break;
+                //  MySQL query for departments
+                case "Current employee roles":
+                    break;
+                //  MySQL query for roles
+                case "Current employees":
+                    //  MySQL query for employees
+                    break;
+                case "All current company information":
+                    //  MySQL query for all information
+                    break;
+                case "Exit":
+                    endApp();
+                    break;
+            }
+        })
+}
 
 
 // function updateRole() {
