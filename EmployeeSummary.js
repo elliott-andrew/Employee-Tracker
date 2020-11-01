@@ -318,14 +318,15 @@ function employeeSearch() {
 };
 
 function allInformation() {
-    const query = "SELECT departments.id, departments.name, employees.first_name, employees.last_name, employees.role_id, roles.id, roles.title, roles.salary, roles.department_id";
+    let query = "SELECT departments.id, departments.name, employees.first_name, employees.last_name, employees.role_id, roles.id, roles.title, roles.salary, roles.department_id";
     query += "FROM employees INNER JOIN roles ON (employees.role_id = roles.id) ORDER BY roles.id";
     connection.query(query, function (err, res) {
         for (let i = 0; i < array.length; i++) {
             console.log("Employee name: " + res[i].first_name + res[i].last_name + "| Title: " + res[i].title + "| Department: " + res[i].name + "| Salary: " + res[i].salary);
         };
+        if (err) throw (err)
     });
-}; ß
+};
 
 
 // function updateRole() {
