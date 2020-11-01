@@ -111,7 +111,8 @@ function addNew() {
             choices: [
                 "Add new department",
                 "Add new role",
-                "Add new employee"
+                "Add new employee",
+                "Return to main menu"
             ]
         })
         // Route the user depending on answer
@@ -120,13 +121,14 @@ function addNew() {
                 case "Add new department":
                     addNewDepartment();
                     break;
-
                 case "Add new role":
                     addNewRole();
                     break;
-
                 case "Add new employee":
                     addNewEmployee();
+                    break;
+                case "Return to main menu":
+                    initialPrompt();
                     break;
             }
         })
@@ -250,27 +252,31 @@ function addNewEmployee() {
 function viewAll() {
     inquirer
         .prompt([
-            // Display all departments
+            // Gather answers
             {
                 name: "viewData",
                 message: "What would you like to view?",
                 type: "rawlist",
-                choices: ["Current departments", "Current employee roles", "Current employees", "All current company information", "Exit"]
+                choices: ["Current departments", "Current employee roles", "Current employees", "All current company information", "Return to main menu", "Exit"]
             },
         ])
+        // Route the user depending on answer
         .then(function (answer) {
             switch (answer.viewData) {
                 case "Current departments":
                     departmentSearch();
                     break;
                 case "Current employee roles":
+                    roleSearch();
                     break;
-                //  MySQL query for roles
                 case "Current employees":
-                    //  MySQL query for employees
+                    employeeSearch();
                     break;
                 case "All current company information":
                     //  MySQL query for all information
+                    break;
+                case "Return to main menu":
+                    initialPrompt();
                     break;
                 case "Exit":
                     endApp();
@@ -279,6 +285,7 @@ function viewAll() {
         })
 }
 
+// Return all currently saved department data
 function departmentSearch() {
     connection.query("SELECT * FROM department", function (err, res) {
         if (err) throw err;
@@ -286,8 +293,30 @@ function departmentSearch() {
             console.log(res[i].name);
         }
         viewAll();
-    })
-}
+    });
+};
+
+// Return all currently saved role data
+function roleSearch() {
+    connection.query("SELECT * FROM role", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i].name);
+        }
+        viewAll();
+    });
+};
+
+// Return all currently saved employee data
+function employeeSearch() {
+    connection.query("SELECT * FROM employee", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i].name);
+        }
+        viewAll();
+    });
+};
 
 
 // function updateRole() {
