@@ -1,6 +1,32 @@
+// Dependencies
+// ======================================================================
 const figlet = require('figlet');
+const mysql = require('mysql');
 const inquirer = require('inquirer');
 
+// MySQL connection
+// ======================================================================
+var connection = mysql.createConnection({
+    host: "localhost",
+
+    // Your port; if not 3306
+    port: 3306,
+
+    // Your username
+    user: "root",
+
+    // Your password
+    password: "",
+    database: "employee_summaryDB"
+});
+
+connection.connect(function (err) {
+    if (err) throw err;
+    runSearch();
+});
+
+// Begin App Functionality
+// ======================================================================
 figlet('Employee\nSummary', function (err, data) {
     if (err) {
         console.log('Something went wrong...');
