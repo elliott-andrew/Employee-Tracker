@@ -80,7 +80,7 @@ function addNew() {
             choices: [
                 "Add new department.",
                 "Add new role.",
-                "Add new employee"
+                "Add new employee."
             ]
         })
         .then(function (answer) {
@@ -93,7 +93,7 @@ function addNew() {
                     addNewRole();
                     break;
 
-                case "Add new employee":
+                case "Add new employee.":
                     addNewEmployee();
                     break;
             }
@@ -132,6 +132,11 @@ function addNewEmployee() {
             {
                 name: "newEmployeeLN",
                 message: "What is the last name of the new Employee?",
+                type: "input"
+            },
+            {
+                name: "newEmployeeRole",
+                message: "What is the employee's Role?",
                 type: "input"
             }
         ])
