@@ -7,7 +7,7 @@ figlet('Employee\nSummary', function (err, data) {
         console.dir(err);
         return;
     }
-    console.log(data + '\n' + '\nAdd departments, roles and employess within your company\nto easily organize and your plan your business.\n' + '\n' + 'Begin questions:' + '\n')
+    console.log(data + '\n\nAdd departments, roles and employess within your company\nto easily organize and your plan your business.\n' + '\nBegin questions:\n')
     questions();
 });
 
