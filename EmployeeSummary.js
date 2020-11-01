@@ -29,20 +29,23 @@ const inquirer = require('inquirer');
 // ======================================================================
 // Start the app
 const runApp = () => {
+    // Create ASCII art with the words Employee Summary
     figlet('Employee\nSummary', function (err, data) {
         if (err) {
             console.log('Something went wrong...');
             console.dir(err);
             return;
         }
+        // Display the art along with a mini app description
         console.log(data + '\n\nAdd departments, roles and employess within your company\nto easily organize and your plan your business.\n' + '\nBegin questions:\n')
         initialPrompt();
     });
 }
-
+// Ask what the user would like to do
 function initialPrompt() {
     inquirer
         .prompt([
+            // Gather answers
             {
                 name: 'action',
                 message: 'What would you like to do?',
@@ -55,6 +58,7 @@ function initialPrompt() {
                 ]
             }
         ])
+        // Route the user depending on answer
         .then(function (answer) {
             switch (answer.action) {
                 case "Add new department, role or employee.":
@@ -87,9 +91,11 @@ function endApp() {
     })
 }
 
+// Add new department, role or employee
 function addNew() {
     inquirer
         .prompt({
+            // Gather answers
             name: "SelectAddNewOp",
             message: "Would you like to add a new department, role or employee?",
             type: "rawlist",
@@ -99,6 +105,7 @@ function addNew() {
                 "Add new employee."
             ]
         })
+        // Route the user depending on answer
         .then(function (answer) {
             switch (answer.SelectAddNewOp) {
                 case "Add new department.":
@@ -116,9 +123,11 @@ function addNew() {
         })
 }
 
+// Add a new department
 function addNewDepartment() {
     inquirer
         .prompt([
+            // Gather answers
             {
                 name: "newDepartment",
                 message: "What is the name of the new department?",
@@ -130,6 +139,7 @@ function addNewDepartment() {
                 type: "rawlist",
                 choices: ["Yes", "No"]
             }
+            // Ask the user if they would like to do more
         ]).then(function (answer) {
             switch (answer.continue) {
                 case "Yes":
@@ -141,9 +151,11 @@ function addNewDepartment() {
             }
         })
 }
+// Add a new employee role
 function addNewRole() {
     inquirer
         .prompt([
+            // Gather answers
             {
                 name: "newRole",
                 message: "What is the name of the new employee role?",
@@ -155,6 +167,7 @@ function addNewRole() {
                 type: "rawlist",
                 choices: ["Yes", "No"]
             }
+            // Ask the user if they would like to do more
         ]).then(function (answer) {
             switch (answer.continue) {
                 case "Yes":
@@ -167,9 +180,11 @@ function addNewRole() {
         })
 }
 
+// Add a new employee
 function addNewEmployee() {
     inquirer
         .prompt([
+            // Gather answers
             {
                 name: "newEmployeeFN",
                 message: "What is the first name of the new Employee?",
@@ -191,6 +206,7 @@ function addNewEmployee() {
                 type: "rawlist",
                 choices: ["Yes", "No"]
             }
+            // Ask the user if they would like to do more
         ]).then(function (answer) {
             switch (answer.continue) {
                 case "Yes":
