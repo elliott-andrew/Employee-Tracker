@@ -9,24 +9,24 @@ const Role = require('./lib/role');
 
 // MySQL connection
 // ======================================================================
-// var connection = mysql.createConnection({
-//     host: "localhost",
+var connection = mysql.createConnection({
+    host: "localhost",
 
-//     // Your port; if not 3306
-//     port: 3306,
+    // Your port; if not 3306
+    port: 3306,
 
-//     // Your username
-//     user: "root",
+    // Your username
+    user: "root",
 
-//     // Your password
-//     password: "",
-//     database: "employee_summaryDB"
-// });
+    // Your password
+    password: "myfakepassword",
+    database: "employee_summaryDB"
+});
 
-// connection.connect(function (err) {
-//     if (err) throw err;
-//     runApp();
-// });
+connection.connect(function (err) {
+    if (err) throw err;
+    runApp();
+});
 
 // Data
 // ======================================================================
@@ -74,7 +74,7 @@ function initialPrompt() {
                     addNew();
                     break;
 
-                case "View all current departments, roles and employees":
+                case "View all current departments, roles or employees":
                     viewAll();
                     break;
 
@@ -152,6 +152,8 @@ function addNewDepartment() {
         ]).then(function (answer) {
             let addedDepartment = new Department(answer.newDepartment);
             allDepartments.push(addedDepartment);
+            // const query = "INSERT INTO department (name) VALUES ?";
+            // connection.query(query, { name: answer.newDepartment })
             switch (answer.continue) {
                 case "Add another department":
                     addNewDepartment();
@@ -165,6 +167,7 @@ function addNewDepartment() {
             }
         })
 }
+
 // Add a new employee role
 function addNewRole() {
     inquirer
@@ -243,6 +246,7 @@ function addNewEmployee() {
         })
 }
 
+// View stored information
 function viewAll() {
     inquirer
         .prompt([
@@ -253,11 +257,12 @@ function viewAll() {
                 type: "rawlist",
                 choices: ["Current departments", "Current employee roles", "Current employees", "All current company information", "Exit"]
             },
-        ]).then(function (answer) {
+        ])
+        .then(function (answer) {
             switch (answer.viewData) {
                 case "Current departments":
+                    departmentSearch();
                     break;
-                //  MySQL query for departments
                 case "Current employee roles":
                     break;
                 //  MySQL query for roles
@@ -274,6 +279,16 @@ function viewAll() {
         })
 }
 
+function departmentSearch() {
+    connection.query("SELECT * FROM department", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i].name);
+        }
+        viewAll();
+    })
+}
+
 
 // function updateRole() {
 //     // Search employee name, or view list of all employees to choose from
@@ -283,6 +298,3 @@ function viewAll() {
 //     // return the updated information
 //     // prompt if the user would like to do more
 // }
-
-// Start the app
-runApp();
