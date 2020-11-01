@@ -49,7 +49,7 @@ const runApp = () => {
         console.log(data + '\n\nAdd departments, roles and employess within your company\nto easily organize and your plan your business.\n' + '\nBegin questions:\n')
         initialPrompt();
     });
-}
+};
 // Ask what the user would like to do
 function initialPrompt() {
     inquirer
@@ -85,9 +85,8 @@ function initialPrompt() {
                 case "Exit":
                     endApp();
                     break;
-
-            }
-        })
+            };
+        });
 };
 
 // End the app
@@ -96,9 +95,9 @@ function endApp() {
     process.on('SIGTERM', () => {
         server.close(() => {
             console.log('Process terminated')
-        })
-    })
-}
+        });
+    });
+};
 
 // Add new department, role or employee
 function addNew() {
@@ -130,9 +129,9 @@ function addNew() {
                 case "Return to main menu":
                     initialPrompt();
                     break;
-            }
-        })
-}
+            };
+        });
+};
 
 // Add a new department
 function addNewDepartment() {
@@ -166,9 +165,9 @@ function addNewDepartment() {
                 case "Exit":
                     endApp();
                     break;
-            }
-        })
-}
+            };
+        });
+};
 
 // Add a new employee role
 function addNewRole() {
@@ -203,9 +202,9 @@ function addNewRole() {
                 case "Exit":
                     endApp();
                     break;
-            }
-        })
-}
+            };
+        });
+};
 
 // Add a new employee
 function addNewEmployee() {
@@ -244,9 +243,9 @@ function addNewEmployee() {
                 case "Exit":
                     endApp();
                     break;
-            }
-        })
-}
+            };
+        });
+};
 
 // View stored information
 function viewAll() {
@@ -281,17 +280,17 @@ function viewAll() {
                 case "Exit":
                     endApp();
                     break;
-            }
-        })
-}
+            };
+        });
+};
 
 // Return all currently saved department data
 function departmentSearch() {
     connection.query("SELECT * FROM department", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].name);
-        }
+            console.log(res[i].id + "|" + res[i].name);
+        };
         viewAll();
     });
 };
@@ -301,8 +300,8 @@ function roleSearch() {
     connection.query("SELECT * FROM role", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].name);
-        }
+            console.log(res[i].title + "|" + res[i].salary + "|" + res[i].department_id);
+        };
         viewAll();
     });
 };
@@ -312,8 +311,8 @@ function employeeSearch() {
     connection.query("SELECT * FROM employee", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].name);
-        }
+            console.log(res[i].id + "|" + res[i].first_name + "|" + res[i].last_name + "|" + res[i].role_id);
+        };
         viewAll();
     });
 };
