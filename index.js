@@ -16,7 +16,7 @@ const questions = () => {
         .prompt([
             {
                 name: 'EmployeeName',
-                message: 'What is the employee\'s name?',
+                message: 'What is the employee\'s name?\n',
                 type: 'input'
             }
         ]);
