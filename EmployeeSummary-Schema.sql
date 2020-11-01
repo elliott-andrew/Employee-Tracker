@@ -4,12 +4,12 @@ CREATE database employee_summaryDB;
 USE employee_summaryDB;
 
 CREATE TABLE department (
-  position INT NOT NULL,
+  id INT NOT NULL,
   name VARCHAR(30) NOT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE role (
+CREATE TABLE roles (
   id INT NOT NULL,
   title VARCHAR(30) NOT NULL,
   salary DECIMAL(10,4) NOT NULL,
