@@ -3,6 +3,9 @@
 const figlet = require('figlet');
 const mysql = require('mysql');
 const inquirer = require('inquirer');
+const Employee = require('./lib/employee');
+const Department = require('./lib/department');
+const Role = require('./lib/role');
 
 // MySQL connection
 // ======================================================================
@@ -24,6 +27,12 @@ const inquirer = require('inquirer');
 //     if (err) throw err;
 //     runApp();
 // });
+
+// Data
+// ======================================================================
+let allDepartments = [];
+let allEmployees = [];
+let allEmRoles = [];
 
 // App Functionality
 // ======================================================================
@@ -141,6 +150,8 @@ function addNewDepartment() {
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
+            let addedDepartment = new Department(answer.newDepartment);
+            allDepartments.push(addedDepartment);
             switch (answer.continue) {
                 case "Yes":
                     initialPrompt();
@@ -169,6 +180,8 @@ function addNewRole() {
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
+            let addedRole = new Role(answer.newRole);
+            allEmRoles.push(addedRole);
             switch (answer.continue) {
                 case "Yes":
                     initialPrompt();
@@ -198,11 +211,6 @@ function addNewEmployee() {
                 type: "input"
             },
             {
-                name: "newEmployeeRole",
-                message: "What is the employee's Role?",
-                type: "input"
-            },
-            {
                 name: "continue",
                 message: "Is there anyting else you would like to do?",
                 type: "rawlist",
@@ -210,6 +218,8 @@ function addNewEmployee() {
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
+            let addedEmployee = new Employee(answer.newEmployeeFN, answer.newEmployeeLN);
+            allEmployees.push(addedEmployee);
             switch (answer.continue) {
                 case "Yes":
                     initialPrompt();
