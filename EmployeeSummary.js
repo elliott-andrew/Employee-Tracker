@@ -25,10 +25,10 @@ const inquirer = require('inquirer');
 //     runApp();
 // });
 
-// Begin App Functionality
+// App Functionality
 // ======================================================================
+// Start the app
 const runApp = () => {
-
     figlet('Employee\nSummary', function (err, data) {
         if (err) {
             console.log('Something went wrong...');
@@ -36,11 +36,11 @@ const runApp = () => {
             return;
         }
         console.log(data + '\n\nAdd departments, roles and employess within your company\nto easily organize and your plan your business.\n' + '\nBegin questions:\n')
-        employeePrompt();
+        initialPrompt();
     });
 }
 
-function employeePrompt() {
+function initialPrompt() {
     inquirer
         .prompt([
             {
@@ -77,6 +77,7 @@ function employeePrompt() {
         })
 };
 
+// End the app
 function endApp() {
     /* Use SIGTERM to end the program without killing any running or pending requests. https://flaviocopes.com/node-terminate-program/ */
     process.on('SIGTERM', () => {
@@ -132,7 +133,7 @@ function addNewDepartment() {
         ]).then(function (answer) {
             switch (answer.continue) {
                 case "Yes":
-                    employeePrompt();
+                    initialPrompt();
                     break;
                 case "No":
                     endApp();
@@ -157,7 +158,7 @@ function addNewRole() {
         ]).then(function (answer) {
             switch (answer.continue) {
                 case "Yes":
-                    employeePrompt();
+                    initialPrompt();
                     break;
                 case "No":
                     endApp();
@@ -193,7 +194,7 @@ function addNewEmployee() {
         ]).then(function (answer) {
             switch (answer.continue) {
                 case "Yes":
-                    employeePrompt();
+                    initialPrompt();
                     break;
                 case "No":
                     endApp();
