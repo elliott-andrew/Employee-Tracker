@@ -290,7 +290,7 @@ function departmentSearch() {
     connection.query("SELECT * FROM department", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].id + "|" + res[i].name);
+            console.log("Name: " + res[i].name + " | Department ID: " + res[i].id);
         };
         console.log("\n===========================================\n")
         viewAll();
@@ -303,7 +303,7 @@ function roleSearch() {
     connection.query("SELECT * FROM role", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].title + "|" + res[i].salary + "|" + res[i].department_id);
+            console.log("Title: " + res[i].title + " | Salary: " + res[i].salary + " | Department ID: " + res[i].department_id);
         };
         console.log("\n===========================================\n")
         viewAll();
@@ -316,7 +316,7 @@ function employeeSearch() {
     connection.query("SELECT * FROM employee", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            console.log("Employee ID: " + res[i].id + " | Name: " + res[i].first_name + " " + res[i].last_name);
+            console.log("Name: " + res[i].first_name + " " + res[i].last_name + " | Employee ID: " + res[i].id);
         };
         console.log("\n===========================================\n")
         viewAll();
@@ -324,10 +324,10 @@ function employeeSearch() {
 };
 
 function allInformation() {
-    console.log("\n===========================================\nAll Company Data:")
+    console.log("\n===========================================\nAll Company Data:\n")
     connection.query("SELECT r.title, e.role_id, e.first_name, e.last_name, r.salary, e.manager_id FROM department d JOIN role r ON d.id = r.department_id JOIN employee e ON e.role_id = r.id", function (err, res) {
         for (let i = 0; i < res.length; i++) {
-            console.log("Title: " + res[i].title + " | Role: " + res[i].role_id + " | Name: " + res[i].first_name + res[i].last_name + " | Salary: " + res[i].salary + " | Manager ID: " + res[i].manager_id);
+            console.log("Name: " + res[i].first_name + " " + res[i].last_name + " | Title: " + res[i].title + " | Employee ID: " + res[i].role_id + " | Salary: " + res[i].salary + " | Manager ID: " + res[i].manager_id);
         };
         console.log("\n===========================================\n")
         viewAll();
