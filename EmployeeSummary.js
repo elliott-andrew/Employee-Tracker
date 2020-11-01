@@ -286,44 +286,50 @@ function viewAll() {
 
 // Return all currently saved department data
 function departmentSearch() {
+    console.log("\n===========================================\nAll Departments:\n")
     connection.query("SELECT * FROM department", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             console.log(res[i].id + "|" + res[i].name);
         };
+        console.log("\n===========================================\n")
         viewAll();
     });
 };
 
 // Return all currently saved role data
 function roleSearch() {
+    console.log("\n===========================================\nAll Roles:\n")
     connection.query("SELECT * FROM role", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             console.log(res[i].title + "|" + res[i].salary + "|" + res[i].department_id);
         };
+        console.log("\n===========================================\n")
         viewAll();
     });
 };
 
 // Return all currently saved employee data
 function employeeSearch() {
+    console.log("\n===========================================\nAll Employees:\n")
     connection.query("SELECT * FROM employee", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].id + "|" + res[i].first_name + "|" + res[i].last_name + "|" + res[i].role_id);
+            console.log("Employee ID: " + res[i].id + " | Name: " + res[i].first_name + " " + res[i].last_name);
         };
+        console.log("\n===========================================\n")
         viewAll();
     });
 };
 
 function allInformation() {
-    console.log("\n")
+    console.log("\n===========================================\nAll Company Data:")
     connection.query("SELECT r.title, e.role_id, e.first_name, e.last_name, r.salary, e.manager_id FROM department d JOIN role r ON d.id = r.department_id JOIN employee e ON e.role_id = r.id", function (err, res) {
         for (let i = 0; i < res.length; i++) {
             console.log("Title: " + res[i].title + " | Role: " + res[i].role_id + " | Name: " + res[i].first_name + res[i].last_name + " | Salary: " + res[i].salary + " | Manager ID: " + res[i].manager_id);
         };
-        console.log("\n")
+        console.log("\n===========================================\n")
         viewAll();
         if (err) throw (err)
     })
