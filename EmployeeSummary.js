@@ -182,6 +182,8 @@ function addNewRole() {
 
 // Add a new employee
 function addNewEmployee() {
+    // if no role or department, must add role or department before adding new employee
+    // how to create choices from user input of roles and department
     inquirer
         .prompt([
             // Gather answers
@@ -236,5 +238,5 @@ function addNewEmployee() {
 //     // prompt if the user would like to do more
 // }
 
-
+// Start the app
 runApp();
