@@ -34,10 +34,10 @@ figlet('Employee\nSummary', function (err, data) {
         return;
     }
     console.log(data + '\n\nAdd departments, roles and employess within your company\nto easily organize and your plan your business.\n' + '\nBegin questions:\n')
-    questions();
+    employeePrompt();
 });
 
-const questions = () => {
+const employeePrompt = () => {
     inquirer
         .prompt([
             {
