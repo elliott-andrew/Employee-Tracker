@@ -272,7 +272,7 @@ function viewAll() {
                     employeeSearch();
                     break;
                 case "All current company information":
-                    //  MySQL query for all information
+                    allInformation()
                     break;
                 case "Return to main menu":
                     initialPrompt();
@@ -316,6 +316,16 @@ function employeeSearch() {
         viewAll();
     });
 };
+
+function allInformation() {
+    const query = "SELECT departments.id, departments.name, employees.first_name, employees.last_name, employees.role_id, roles.id, roles.title, roles.salary, roles.department_id";
+    query += "FROM employees INNER JOIN roles ON (employees.role_id = roles.id) ORDER BY roles.id";
+    connection.query(query, function (err, res) {
+        for (let i = 0; i < array.length; i++) {
+            console.log("Employee name: " + res[i].first_name + res[i].last_name + "| Title: " + res[i].title + "| Department: " + res[i].name + "| Salary: " + res[i].salary);
+        };
+    });
+}; ß
 
 
 // function updateRole() {
