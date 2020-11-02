@@ -151,23 +151,29 @@ function addNewDepartment() {
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
-            let addedDepartment = new Department(answer.newDepartment);
-            allDepartments.push(addedDepartment);
-            // const query = "INSERT INTO department (name) VALUES ?";
-            // connection.query(query, { name: answer.newDepartment })
             switch (answer.continue) {
                 case "Add another department":
                     addNewDepartment();
+                    saveDepartment(answer)
                     break;
                 case "Return to main menu":
                     initialPrompt();
+                    saveDepartment(answer)
                     break;
                 case "Exit":
                     endApp();
+                    saveDepartment(answer)
                     break;
             };
         });
 };
+
+function saveDepartment(answer) {
+    let departmentName = `INSERT INTO department (name) VALUES ('${answer.newDepartment}')`;
+    connection.query(departmentName, function (err, res) {
+        if (err) throw err;
+    })
+}
 
 // Add a new employee role
 function addNewRole() {
@@ -332,7 +338,7 @@ function allInformation() {
         console.log("\n===========================================\n")
         viewAll();
         if (err) throw (err)
-    })
+    });
 };
 
 
