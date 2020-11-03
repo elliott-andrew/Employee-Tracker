@@ -119,7 +119,7 @@ function addNew() {
                     addNewEmployee();
                     break;
                 case "Return to main menu":
-                    initialPrompt();
+                    runApp();
                     break;
             };
         });
@@ -204,7 +204,7 @@ function addNewRole() {
                     saveRole(answer);
                     break;
                 case "Return to main menu":
-                    initialPrompt();
+                    runApp();
                     saveRole(answer);
                     break;
                 case "Exit":
@@ -301,7 +301,7 @@ function viewAll() {
                     allInformation()
                     break;
                 case "Return to main menu":
-                    initialPrompt();
+                    runApp();
                     break;
                 case "Exit":
                     endApp();
@@ -388,7 +388,7 @@ function updateExisting() {
                     break;
 
                 case "Delete role":
-                    // updateRole();
+                    updateRole();
                     break;
 
                 case "Delete employee":
@@ -396,7 +396,7 @@ function updateExisting() {
                     break;
 
                 case "Return to the main menu":
-                    initialPrompt();
+                    runApp();
                     break;
 
                 case "Exit":
@@ -406,6 +406,9 @@ function updateExisting() {
         });
 };
 
+// Funtions used in the delete department prompts
+// Allows the user to view all saved departments so they know the ID numbers
+// Allows the user to continue with the delete, return to the previous/main menu, or exit the app
 function updateDepartment() {
     inquirer
         .prompt([
@@ -415,7 +418,7 @@ function updateDepartment() {
                 type: 'rawlist',
                 choices: ["View current departments and ID numbers",
                     "Delete a department by ID number",
-                    "Return to the update menu",
+                    "Return to the delete menu",
                     "Return to the main menu",
                     "Exit"
                 ]
@@ -432,7 +435,7 @@ function updateDepartment() {
                     updateExisting()
                     break;
                 case "Return to the main menu":
-                    initialPrompt();
+                    runApp();
                     break;
                 case "Exit":
                     endApp();
@@ -441,6 +444,8 @@ function updateDepartment() {
         });
 };
 
+// Prompts the user for the department ID number
+// Deletes the department, or aborts
 function deleteDepartment() {
     inquirer
         .prompt([
@@ -448,14 +453,24 @@ function deleteDepartment() {
                 name: "id",
                 message: "What is the ID number of the department you would like to delete?",
                 type: "input",
+            },
+            {
+                name: "confirm",
+                message: "Are you sure you would like to delete this department?",
+                type: "confirm"
             }
         ])
         .then(function (answer) {
-            removeDept(answer);
-            updateDepartment();
+            if (answer.confirm) {
+                removeDept(answer);
+                updateDepartment();
+            } else {
+                updateDepartment();
+            }
         })
 }
 
+// Removes selected department from MYSQL
 function removeDept(answer) {
     let departmentID = `DELETE FROM department WHERE id='${answer.id}' LIMIT 1`;
     connection.query(departmentID, function (err, res) {
@@ -463,6 +478,7 @@ function removeDept(answer) {
     });
 }
 
+// Displays the currently saved departments 
 function renderDept() {
     console.log("\n===========================================\nAll Departments:\n")
     connection.query("SELECT * FROM department", function (err, res) {
