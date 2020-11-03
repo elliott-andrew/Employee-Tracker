@@ -91,7 +91,9 @@ function endApp() {
     });
 };
 
-// Add new department, role or employee
+// Save new
+// ===============================================================================
+// Prompts for new department, role or employee
 function addNew() {
     inquirer
         .prompt({
@@ -129,7 +131,7 @@ function addNew() {
         });
 };
 
-// Add a new department
+// Add a new department ==========================================================
 function addNewDepartment() {
     inquirer
         .prompt([
@@ -172,7 +174,7 @@ function saveDepartment(answer) {
     })
 };
 
-// Add a new employee role
+// Add a new employee role =======================================================
 function addNewRole() {
     inquirer
         .prompt([
@@ -220,7 +222,7 @@ function saveRole(answer) {
     });
 };
 
-// Add a new employee
+// Add a new employee ============================================================
 function addNewEmployee() {
     // if no role or department, must add role or department before adding new employee
     // how to create choices from user input of roles and department
@@ -271,6 +273,7 @@ function saveEmployee(answer) {
 };
 
 // View stored information
+// ===============================================================================
 function viewAll() {
     inquirer
         .prompt([
@@ -359,7 +362,8 @@ function allInformation() {
     });
 };
 
-// Update existing
+// Delete existing
+// ===============================================================================
 function updateExisting() {
     inquirer
         .prompt([
@@ -403,7 +407,7 @@ function updateExisting() {
         });
 };
 
-// Funtions used in the delete department prompts
+// Funtions used in the delete department prompts ================================
 // Allows the user to view all saved departments so they know the ID numbers
 // Allows the user to continue with the delete, return to the previous/main menu, or exit the app
 function updateDepartment() {
@@ -488,7 +492,9 @@ function renderDept() {
     });
 };
 
-// Functions used in the delete role prompts
+// Functions used in the delete role prompts ====================================
+// Allows the user to view all saved roles so they know the ID numbers
+// Allows the user to continue with the delete, return to the previous/main menu, or exit the app
 function updateRole() {
     inquirer
         .prompt([
