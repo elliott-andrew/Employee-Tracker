@@ -393,7 +393,7 @@ function updateExisting() {
                     break;
 
                 case "Delete employee":
-                    // updateEmployee();
+                    updateEmployee();
                     break;
 
                 case "Return to the main menu":
@@ -574,5 +574,90 @@ function renderRoles() {
         };
         console.log("\n===========================================\n")
         updateRole();
+    });
+};
+
+// Functions used in the delete employee prompts ====================================
+// Allows the user to view all saved employees so they know the ID numbers
+// Allows the user to continue with the delete, return to the previous/main menu, or exit the app
+function updateEmployee() {
+    inquirer
+        .prompt([
+            {
+                name: 'action',
+                message: 'What would you like to do?',
+                type: 'rawlist',
+                choices: ["View current employees and ID numbers",
+                    "Delete an employee by ID number",
+                    "Return to the delete menu",
+                    "Return to the main menu",
+                    "Exit"
+                ]
+            }
+        ]).then(function (answer) {
+            switch (answer.action) {
+                case "View current employees and ID numbers":
+                    renderEmployees();
+                    break;
+                case "Delete an employee by ID number":
+                    deleteEmployee()
+                    break;
+                case "Return to the update menu":
+                    updateExisting()
+                    break;
+                case "Return to the main menu":
+                    runApp();
+                    break;
+                case "Exit":
+                    endApp();
+                    break;
+            }
+        });
+};
+
+// Prompts the user for the department ID number
+// Deletes the employee, or aborts
+function deleteEmployee() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                message: "What is the ID number of the employee you would like to delete?",
+                type: "input",
+            },
+            {
+                name: "confirm",
+                message: "Are you sure you would like to delete this employee?",
+                type: "confirm"
+            }
+        ])
+        .then(function (answer) {
+            if (answer.confirm) {
+                removeEmployee(answer);
+                updateEmployee();
+            } else {
+                updateEmployee();
+            }
+        })
+}
+
+// Removes selected role from MYSQL
+function removeEmployee(answer) {
+    let employeeID = `DELETE FROM employee WHERE id='${answer.id}' LIMIT 1`;
+    connection.query(employeeID, function (err, res) {
+        if (err) throw err;
+    });
+}
+
+// Displays the currently saved roles 
+function renderEmployees() {
+    console.log("\n===========================================\nAll Employees:\n")
+    connection.query("SELECT * FROM employee", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log("Name: " + res[i].first_name + " " + res[i].last_name + " | Employee ID: " + res[i].id);
+        };
+        console.log("\n===========================================\n")
+        updateEmployee();
     });
 };
