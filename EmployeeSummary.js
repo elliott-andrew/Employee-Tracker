@@ -168,13 +168,6 @@ function saveDepartment(answer) {
     })
 };
 
-// function deleteDepartment() {
-//     let departmentName = `DELETE FROM department WHERE id = ('${answer.selectedID}')`;
-//     connection.query(departmentName, function (err, res) {
-//         if (err) throw err;
-//     });
-// };
-
 // Add a new employee role
 function addNewRole() {
     inquirer
