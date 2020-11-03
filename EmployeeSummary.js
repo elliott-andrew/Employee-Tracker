@@ -375,7 +375,7 @@ function updateExisting() {
                 choices: [
                     "Delete department",
                     "Delete role",
-                    "Delete employee",
+                    "Delete/update employee",
                     "Return to the main menu",
                     "Exit"
                 ]
@@ -392,7 +392,7 @@ function updateExisting() {
                     updateRole();
                     break;
 
-                case "Delete employee":
+                case "Delete/update employee":
                     updateEmployee();
                     break;
 
@@ -577,7 +577,7 @@ function renderRoles() {
     });
 };
 
-// Functions used in the delete employee prompts ====================================
+// Functions used in the delete/update employee prompts ====================================
 // Allows the user to view all saved employees so they know the ID numbers
 // Allows the user to continue with the delete, return to the previous/main menu, or exit the app
 function updateEmployee() {
@@ -589,6 +589,7 @@ function updateEmployee() {
                 type: 'rawlist',
                 choices: ["View current employees and ID numbers",
                     "Delete an employee by ID number",
+                    "Assign employee role by ID number",
                     "Return to the delete menu",
                     "Return to the main menu",
                     "Exit"
@@ -601,6 +602,9 @@ function updateEmployee() {
                     break;
                 case "Delete an employee by ID number":
                     deleteEmployee()
+                    break;
+                case "Assign employee role by ID number":
+                    assignEmployee()
                     break;
                 case "Return to the update menu":
                     updateExisting()
@@ -648,6 +652,14 @@ function removeEmployee(answer) {
         if (err) throw err;
     });
 };
+
+// Assigns employee to role
+function assignEmployee() {
+    let employeeID = `UPDATE employee SET role_id = '${answer.roleID}' WHERE id='${answer.id}'`;
+    connection.query(employeeID, function (err, res) {
+        if (err) throw err;
+    });
+}
 
 // Displays the currently saved roles 
 function renderEmployees() {
