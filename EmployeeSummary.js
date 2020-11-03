@@ -362,6 +362,7 @@ function allInformation() {
     });
 };
 
+// Update existing
 function updateExisting() {
     inquirer
         .prompt([
@@ -371,9 +372,10 @@ function updateExisting() {
                 message: 'What would you like to do?',
                 type: 'rawlist',
                 choices: [
-                    "Update/remove department",
-                    "Update/remove role",
-                    "Update/remove employee",
+                    "Delete department",
+                    "Delete role",
+                    "Delete employee",
+                    "Return to the main menu",
                     "Exit"
                 ]
             }
@@ -381,21 +383,94 @@ function updateExisting() {
         // Route the user depending on answer
         .then(function (answer) {
             switch (answer.action) {
-                case "Update/remove department":
-                    // updateDepartment();
+                case "Delete department":
+                    updateDepartment();
                     break;
 
-                case "Update/remove role":
+                case "Delete role":
                     // updateRole();
                     break;
 
-                case "Update/remove employee":
+                case "Delete employee":
                     // updateEmployee();
                     break;
 
+                case "Return to the main menu":
+                    initialPrompt();
+                    break;
+
                 case "Exit":
-                    // endApp();
+                    endApp();
                     break;
             };
         });
+};
+
+function updateDepartment() {
+    inquirer
+        .prompt([
+            {
+                name: 'action',
+                message: 'What would you like to do?',
+                type: 'rawlist',
+                choices: ["View current departments and ID numbers",
+                    "Delete a department by ID number",
+                    "Return to the update menu",
+                    "Return to the main menu",
+                    "Exit"
+                ]
+            }
+        ]).then(function (answer) {
+            switch (answer.action) {
+                case "View current departments and ID numbers":
+                    renderDept();
+                    break;
+                case "Delete a department by ID number":
+                    deleteDepartment()
+                    break;
+                case "Return to the update menu":
+                    updateExisting()
+                    break;
+                case "Return to the main menu":
+                    initialPrompt();
+                    break;
+                case "Exit":
+                    endApp();
+                    break;
+            }
+        });
+};
+
+function deleteDepartment() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                message: "What is the ID number of the department you would like to delete?",
+                type: "input",
+            }
+        ])
+        .then(function (answer) {
+            removeDept(answer);
+            updateDepartment();
+        })
+}
+
+function removeDept(answer) {
+    let departmentID = `DELETE FROM department WHERE id='${answer.id}' LIMIT 1`;
+    connection.query(departmentID, function (err, res) {
+        if (err) throw err;
+    });
+}
+
+function renderDept() {
+    console.log("\n===========================================\nAll Departments:\n")
+    connection.query("SELECT * FROM department", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log("Name: " + res[i].name + " | Department ID: " + res[i].id);
+        };
+        console.log("\n===========================================\n")
+        updateDepartment();
+    });
 };
