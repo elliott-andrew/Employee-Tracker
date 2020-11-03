@@ -3,9 +3,6 @@
 const figlet = require('figlet');
 const mysql = require('mysql');
 const inquirer = require('inquirer');
-const Employee = require('./lib/employee');
-const Department = require('./lib/department');
-const Role = require('./lib/role');
 
 // MySQL connection
 // ======================================================================
@@ -28,12 +25,6 @@ connection.connect(function (err) {
     runApp();
 });
 
-// Data
-// ======================================================================
-let allDepartments = [];
-let allEmployees = [];
-let allEmRoles = [];
-
 // App Functionality
 // ======================================================================
 // Start the app
@@ -50,6 +41,7 @@ const runApp = () => {
         initialPrompt();
     });
 };
+
 // Ask what the user would like to do
 function initialPrompt() {
     inquirer
@@ -61,8 +53,8 @@ function initialPrompt() {
                 type: 'rawlist',
                 choices: [
                     "Add new department, role or employee",
-                    "View all current departments, roles or employees",
-                    "Update existing employee roles",
+                    "View existing departments, roles or employees",
+                    "Update existing departments, roles or employees",
                     "Exit"
                 ]
             }
@@ -74,12 +66,12 @@ function initialPrompt() {
                     addNew();
                     break;
 
-                case "View all current departments, roles or employees":
+                case "View existing departments, roles or employees":
                     viewAll();
                     break;
 
-                case "Updates existing employee role":
-                    updateRole();
+                case "Update existing departments, roles or employees":
+                    updateExisting();
                     break;
 
                 case "Exit":
@@ -168,12 +160,20 @@ function addNewDepartment() {
         });
 };
 
+// Save department
 function saveDepartment(answer) {
     let departmentName = `INSERT INTO department (name) VALUES ('${answer.newDepartment}')`;
     connection.query(departmentName, function (err, res) {
         if (err) throw err;
     })
-}
+};
+
+// function deleteDepartment() {
+//     let departmentName = `DELETE FROM department WHERE id = ('${answer.selectedID}')`;
+//     connection.query(departmentName, function (err, res) {
+//         if (err) throw err;
+//     });
+// };
 
 // Add a new employee role
 function addNewRole() {
@@ -182,7 +182,12 @@ function addNewRole() {
             // Gather answers
             {
                 name: "newRole",
-                message: "What is the name of the new employee role?",
+                message: "What is the title of the new employee role?",
+                type: "input"
+            },
+            {
+                name: "newSalary",
+                message: "What is the salary of the new employee role?",
                 type: "input"
             },
             {
@@ -193,23 +198,29 @@ function addNewRole() {
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
-            let addedRole = new Role(answer.newRole);
-            allEmRoles.push(addedRole);
             switch (answer.continue) {
                 case "Add another role.":
                     addNewRole();
-                    break;
-                case "Update current employee's role":
-                    updateRole();
+                    saveRole(answer);
                     break;
                 case "Return to main menu":
                     initialPrompt();
+                    saveRole(answer);
                     break;
                 case "Exit":
                     endApp();
+                    saveRole(answer);
                     break;
             };
         });
+};
+
+// Save role
+function saveRole(answer) {
+    let departmentName = `INSERT INTO role (title, salary) VALUES ('${answer.newRole}', '${answer.newSalary}')`;
+    connection.query(departmentName, function (err, res) {
+        if (err) throw err;
+    });
 };
 
 // Add a new employee
@@ -237,20 +248,29 @@ function addNewEmployee() {
             }
             // Ask the user if they would like to do more
         ]).then(function (answer) {
-            let addedEmployee = new Employee(answer.newEmployeeFN, answer.newEmployeeLN);
-            allEmployees.push(addedEmployee);
             switch (answer.continue) {
                 case "Add another employee":
                     addNewEmployee();
+                    saveEmployee(answer);
                     break;
                 case "Return to main menu":
                     initialPrompt();
+                    saveEmployee(answer);
                     break;
                 case "Exit":
                     endApp();
+                    saveEmployee(answer);
                     break;
             };
         });
+};
+
+// Save employee
+function saveEmployee(answer) {
+    let departmentName = `INSERT INTO employee (first_name, last_name) VALUES ('${answer.newEmployeeFN}', '${answer.newEmployeeLN}')`;
+    connection.query(departmentName, function (err, res) {
+        if (err) throw err;
+    });
 };
 
 // View stored information
@@ -262,7 +282,7 @@ function viewAll() {
                 name: "viewData",
                 message: "What would you like to view?",
                 type: "rawlist",
-                choices: ["Current departments", "Current employee roles", "Current employees", "All current company information", "Return to main menu", "Exit"]
+                choices: ["Current departments", "Current employee roles", "Current employees", "Company Overview", "Return to main menu", "Exit"]
             },
         ])
         // Route the user depending on answer
@@ -277,7 +297,7 @@ function viewAll() {
                 case "Current employees":
                     employeeSearch();
                     break;
-                case "All current company information":
+                case "Company Overview":
                     allInformation()
                     break;
                 case "Return to main menu":
@@ -329,6 +349,7 @@ function employeeSearch() {
     });
 };
 
+// View all information
 function allInformation() {
     console.log("\n===========================================\nAll Company Data:\n")
     connection.query("SELECT r.title, e.role_id, e.first_name, e.last_name, r.salary, e.manager_id FROM department d JOIN role r ON d.id = r.department_id JOIN employee e ON e.role_id = r.id", function (err, res) {
@@ -341,12 +362,40 @@ function allInformation() {
     });
 };
 
+function updateExisting() {
+    inquirer
+        .prompt([
+            // Gather answers
+            {
+                name: 'action',
+                message: 'What would you like to do?',
+                type: 'rawlist',
+                choices: [
+                    "Update/remove department",
+                    "Update/remove role",
+                    "Update/remove employee",
+                    "Exit"
+                ]
+            }
+        ])
+        // Route the user depending on answer
+        .then(function (answer) {
+            switch (answer.action) {
+                case "Update/remove department":
+                    // updateDepartment();
+                    break;
 
-// function updateRole() {
-//     // Search employee name, or view list of all employees to choose from
-//     // Display the selected employee's current information
-//     // prompt for new role
-//     // update the employee's information
-//     // return the updated information
-//     // prompt if the user would like to do more
-// }
+                case "Update/remove role":
+                    // updateRole();
+                    break;
+
+                case "Update/remove employee":
+                    // updateEmployee();
+                    break;
+
+                case "Exit":
+                    // endApp();
+                    break;
+            };
+        });
+};
