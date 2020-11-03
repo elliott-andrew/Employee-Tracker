@@ -13,7 +13,7 @@ INSERT INTO department VALUES (2, 'Women\'s Clothing');
 INSERT INTO department VALUES (3, 'Toy Department');
 
 CREATE TABLE role (
-  id INT AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   title VARCHAR(30) NOT NULL,
   salary DECIMAL(10,4) NOT NULL,
   department_id INT,
@@ -26,7 +26,7 @@ INSERT INTO role VALUES (3, 'Cashier', 45000.00, 1);
 INSERT INTO role VALUES (4, 'Cashier', 54000.00, 2);
 
 CREATE TABLE employee (
-  id INT AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
   role_id INT,
@@ -44,16 +44,16 @@ INSERT INTO employee VALUES (4, 'Kyle', 'The Cat', 4, 2);
 -- SELECT * FROM role;
 -- SELECT * FROM employee;
 
-SELECT 
-d.name,
-r.title,
-e.role_id,
-e.first_name,
-e.last_name,
-r.salary,
-e.manager_id
-FROM department d
-JOIN role r
-	ON d.id = r.department_id
-JOIN employee e
-	ON e.role_id = r.id
+-- SELECT 
+-- d.name,
+-- r.title,
+-- e.role_id,
+-- e.first_name,
+-- e.last_name,
+-- r.salary,
+-- e.manager_id
+-- FROM department d
+-- JOIN role r
+-- 	ON d.id = r.department_id
+-- JOIN employee e
+-- 	ON e.role_id = r.id

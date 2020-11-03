@@ -487,3 +487,86 @@ function renderDept() {
         updateDepartment();
     });
 };
+
+// Functions used in the delete role prompts
+function updateRole() {
+    inquirer
+        .prompt([
+            {
+                name: 'action',
+                message: 'What would you like to do?',
+                type: 'rawlist',
+                choices: ["View current roles and ID numbers",
+                    "Delete a role by ID number",
+                    "Return to the delete menu",
+                    "Return to the main menu",
+                    "Exit"
+                ]
+            }
+        ]).then(function (answer) {
+            switch (answer.action) {
+                case "View current roles and ID numbers":
+                    renderRoles();
+                    break;
+                case "Delete a role by ID number":
+                    deleteRole()
+                    break;
+                case "Return to the update menu":
+                    updateExisting()
+                    break;
+                case "Return to the main menu":
+                    runApp();
+                    break;
+                case "Exit":
+                    endApp();
+                    break;
+            }
+        });
+};
+
+// Prompts the user for the department ID number
+// Deletes the role, or aborts
+function deleteRole() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                message: "What is the ID number of the role you would like to delete?",
+                type: "input",
+            },
+            {
+                name: "confirm",
+                message: "Are you sure you would like to delete this role?",
+                type: "confirm"
+            }
+        ])
+        .then(function (answer) {
+            if (answer.confirm) {
+                removeRole(answer);
+                updateRole();
+            } else {
+                updateRole();
+            }
+        })
+}
+
+// Removes selected role from MYSQL
+function removeRole(answer) {
+    let roleID = `DELETE FROM role WHERE id='${answer.id}' LIMIT 1`;
+    connection.query(roleID, function (err, res) {
+        if (err) throw err;
+    });
+}
+
+// Displays the currently saved roles 
+function renderRoles() {
+    console.log("\n===========================================\nAll Roles:\n")
+    connection.query("SELECT * FROM role", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log("Title: " + res[i].title + " | " + res[i].id);
+        };
+        console.log("\n===========================================\n")
+        updateRole();
+    });
+};
