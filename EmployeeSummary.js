@@ -103,7 +103,8 @@ function addNew() {
                 "Add new department",
                 "Add new role",
                 "Add new employee",
-                "Return to main menu"
+                "Return to main menu",
+                "Exit"
             ]
         })
         // Route the user depending on answer
@@ -120,6 +121,9 @@ function addNew() {
                     break;
                 case "Return to main menu":
                     runApp();
+                    break;
+                case "Exit":
+                    endApp();
                     break;
             };
         });
