@@ -587,9 +587,10 @@ function updateEmployee() {
                 name: 'action',
                 message: 'What would you like to do?',
                 type: 'rawlist',
-                choices: ["View current employees and ID numbers",
+                choices: [
+                    "View current employees and ID numbers",
                     "Delete an employee by ID number",
-                    "Assign employee role by ID number",
+                    "Assign an employee's role by ID number",
                     "Return to the delete menu",
                     "Return to the main menu",
                     "Exit"
@@ -601,10 +602,10 @@ function updateEmployee() {
                     renderEmployees();
                     break;
                 case "Delete an employee by ID number":
-                    deleteEmployee()
+                    deleteEmployee();
                     break;
-                case "Assign employee role by ID number":
-                    assignEmployee()
+                case "Assign an employee's role by ID number":
+                    findRoleID()
                     break;
                 case "Return to the update menu":
                     updateExisting()
@@ -631,7 +632,7 @@ function deleteEmployee() {
             },
             {
                 name: "confirm",
-                message: "Are you sure you would like to delete this employee?",
+                message: `Are you sure you would like to delete this employee?`,
                 type: "confirm"
             }
         ])
@@ -653,11 +654,78 @@ function removeEmployee(answer) {
     });
 };
 
-// Assigns employee to role
+function findRoleID() {
+    inquirer
+        .prompt([
+            {
+                name: 'action',
+                type: 'rawlist',
+                choices: [
+                    "View current roles and ID numbers",
+                    "Assign an employee's role by ID number",
+                    "Return to the update menu",
+                    "Return to the main menu",
+                    "Exit"
+                ]
+            }
+        ])
+        .then(function (answer) {
+            switch (answer.action) {
+                case "View current roles and ID numbers":
+                    renderRoles();
+                    break;
+                case "Assign an employee's role by ID number":
+                    assignEmployee();
+                    break;
+                case "Return to the update menu":
+                    updateExisting()
+                    break;
+                case "Return to the main menu":
+                    runApp();
+                    break;
+                case "Exit":
+                    endApp();
+                    break;
+            }
+        });
+}
 function assignEmployee() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What is the ID number for the role you would like to assign?",
+                name: "roleID"
+            },
+            {
+                type: "input",
+                message: "What is the ID number for the employee whose role you are assigning?",
+                name: "id"
+            }
+        ]).then(function (answer) {
+            saveEmRole(answer);
+
+        })
+}
+// Assigns employee to role
+function saveEmRole(answer) {
     let employeeID = `UPDATE employee SET role_id = '${answer.roleID}' WHERE id='${answer.id}'`;
     connection.query(employeeID, function (err, res) {
         if (err) throw err;
+        console.log("Employee's role successfully updated!")
+        updateEmployee()
+    });
+}
+
+function renderRoles() {
+    console.log("\n===========================================\nAll Roles:\n")
+    connection.query("SELECT * FROM role", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log("ID: " + res[i].id + " | " + "Title: " + res[i].title);
+        };
+        console.log("\n===========================================\n")
+        findRoleID();
     });
 }
 
