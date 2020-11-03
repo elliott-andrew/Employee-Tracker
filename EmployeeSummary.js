@@ -469,7 +469,7 @@ function deleteDepartment() {
                 updateDepartment();
             }
         })
-}
+};
 
 // Removes selected department from MYSQL
 function removeDept(answer) {
@@ -477,7 +477,7 @@ function removeDept(answer) {
     connection.query(departmentID, function (err, res) {
         if (err) throw err;
     });
-}
+};
 
 // Displays the currently saved departments 
 function renderDept() {
@@ -554,7 +554,7 @@ function deleteRole() {
                 updateRole();
             }
         })
-}
+};
 
 // Removes selected role from MYSQL
 function removeRole(answer) {
@@ -562,7 +562,7 @@ function removeRole(answer) {
     connection.query(roleID, function (err, res) {
         if (err) throw err;
     });
-}
+};
 
 // Displays the currently saved roles 
 function renderRoles() {
@@ -638,8 +638,8 @@ function deleteEmployee() {
             } else {
                 updateEmployee();
             }
-        })
-}
+        });
+};
 
 // Removes selected role from MYSQL
 function removeEmployee(answer) {
@@ -647,7 +647,7 @@ function removeEmployee(answer) {
     connection.query(employeeID, function (err, res) {
         if (err) throw err;
     });
-}
+};
 
 // Displays the currently saved roles 
 function renderEmployees() {
