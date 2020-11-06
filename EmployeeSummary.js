@@ -374,7 +374,7 @@ function updateExisting() {
                 type: 'rawlist',
                 choices: [
                     "Delete department",
-                    "Delete role",
+                    "Delete/update role",
                     "Delete/update employee",
                     "Return to the main menu",
                     "Exit"
@@ -388,7 +388,7 @@ function updateExisting() {
                     updateDepartment();
                     break;
 
-                case "Delete role":
+                case "Delete/update role":
                     updateRole();
                     break;
 
@@ -502,8 +502,9 @@ function updateRole() {
                 name: 'action',
                 message: 'What would you like to do?',
                 type: 'rawlist',
-                choices: ["View current roles and ID numbers",
+                choices: ["View current roles, departments and ID numbers",
                     "Delete a role by ID number",
+                    "Assign role to department by ID number",
                     "Return to the delete menu",
                     "Return to the main menu",
                     "Exit"
@@ -511,14 +512,17 @@ function updateRole() {
             }
         ]).then(function (answer) {
             switch (answer.action) {
-                case "View current roles and ID numbers":
+                case "View current roles, departments and ID numbers":
                     renderRoles();
                     break;
                 case "Delete a role by ID number":
-                    deleteRole()
+                    deleteRole();
+                    break;
+                case "Assign role to department by ID number":
+                    assignRole();
                     break;
                 case "Return to the update menu":
-                    updateExisting()
+                    updateExisting();
                     break;
                 case "Return to the main menu":
                     runApp();
@@ -561,6 +565,34 @@ function removeRole(answer) {
     let roleID = `DELETE FROM role WHERE id='${answer.id}' LIMIT 1`;
     connection.query(roleID, function (err, res) {
         if (err) throw err;
+    });
+};
+
+function assignRole() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What is the ID number for the department you would like to assign?",
+                name: "deptID"
+            },
+            {
+                type: "input",
+                message: "What is the ID number for the role you are assigning?",
+                name: "id"
+            }
+        ]).then(function (answer) {
+            saveDeptRole(answer);
+
+        });
+};
+
+function saveDeptRole(answer) {
+    let departmentID = `UPDATE role SET department_id = '${answer.deptID}' WHERE id='${answer.id}'`;
+    connection.query(departmentID, function (err, res) {
+        if (err) throw err;
+        console.log("Role's department successfully updated!")
+        updateRole();
     });
 };
 
@@ -688,7 +720,8 @@ function findRoleID() {
                     break;
             }
         });
-}
+};
+
 function assignEmployee() {
     inquirer
         .prompt([
@@ -706,7 +739,8 @@ function assignEmployee() {
             saveEmRole(answer);
 
         })
-}
+};
+
 // Assigns employee to role
 function saveEmRole(answer) {
     let employeeID = `UPDATE employee SET role_id = '${answer.roleID}' WHERE id='${answer.id}'`;
