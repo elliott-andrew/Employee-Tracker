@@ -464,7 +464,6 @@ function deleteDepartment() {
         .then(function (answer) {
             if (answer.confirm) {
                 removeDept(answer);
-                updateDepartment();
             } else {
                 updateDepartment();
             }
@@ -476,6 +475,7 @@ function removeDept(answer) {
     let departmentID = `DELETE FROM department WHERE id='${answer.id}' LIMIT 1`;
     connection.query(departmentID, function (err, res) {
         if (err) throw err;
+        updateDepartment();
     });
 };
 
